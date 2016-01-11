@@ -311,7 +311,7 @@ module ProjectHelper
             # the processing of the uploaded datapackage.json file).
             # Do a quick check of each csv file.
             dp_res_fields = dp_res.datapackage_resource_fields
-            csv_actual_fields = CSV.open(csv.tempfile, 'r', {:col_sep => dp_res.delimiter}) { |csvfile| csvfile.first }.sort
+            csv_actual_fields = CSV.open(csv.tempfile, 'r', {:col_sep => dp_res.delimiter, encoding: "iso-8859-1:UTF-8"}) { |csvfile| csvfile.first }.sort
             csv_metadata_fields = dp_res_fields.map { |f| f.name }.sort
             if csv_actual_fields != csv_metadata_fields
               @feedback[:errors] << "The datapackage.json field names for " + csv.original_filename +

@@ -1,5 +1,4 @@
-
-admin_email = 'admin@example.com'
+admin_email = 'harrison@avhana.com'
 
 u = User.where(email: admin_email)
 if u.empty?

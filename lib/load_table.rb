@@ -15,7 +15,7 @@ class LoadTable
     @datapackage_resource = datapackage_resource
     load_logger.info("Initialising load of #{@datapackage_resource.table_ref}")
     @column_metadata = DatapackageResourceField.where(datapackage_resource_id: @datapackage_resource.id)
-    @csv_file = File.open(@ds.datafile.path)
+    @csv_file = convert_to_utf8_encoding(File.open(@ds.datafile.path))
     @upload_method = upload_method
 
     upload_to_db_table
@@ -24,6 +24,15 @@ class LoadTable
 
 
   private
+
+  def convert_to_utf8_encoding(original_file)
+    original_string = original_file.read
+    final_string = original_string.encode(invalid: :replace, undef: :replace, replace: '') #If you'd rather invalid characters be replaced with something else, do so here.
+    final_file = Tempfile.new('import') #No need to save a real File
+    final_file.write(final_string)
+    final_file.close #Don't forget me
+    final_file
+  end
 
   def load_logger
     log_dir = Project.find(@ds.project_id).job_log_path
